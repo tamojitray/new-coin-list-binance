@@ -22,28 +22,35 @@ script_content = script_tag.string
 # Convert the script content to a JSON object
 json_data = json.loads(script_content)
 
+#Testing with custom json data
+#with open('data.json') as json_file:
+ #json_data = json.load(json_file)
+
+newdate = 0
 #Scrap all the news
-for n in range(0, 20):
+for n in range(19,-1,-1):
  coin = json_data['routeProps']['ce50']['catalogs'][0]['articles'][n]['title']
- 
+
  #Scrap only the new listing
  if 'Binance Will List' in coin:
+
+  #Extract only the coin Symbol
+  start = '('
+  end = ')'
+  s = coin
+  symbol=s[s.find(start)+len(start):s.rfind(end)]
+
   date = json_data['routeProps']['ce50']['catalogs'][0]['articles'][n]['releaseDate']
 
-  #Scrap only after a perticular date
-  if date > 1676619260940:
+  #Scrap only the latest  
+  if date > newdate:
+   newdate=date
 
+   #print(symbol)
    #Unix date to regular date format
    #timestamp_with_ms = date
    #dt = datetime.datetime.fromtimestamp(timestamp_with_ms / 1000)
-   #formatted_time = dt.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
-   
-   #Extract only the coin Symbol
-   start = '('
-   end = ')'
-   s = coin
-   print(s[s.find(start)+len(start):s.rfind(end)])
-
+   #formatted_time = dt.strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]   
    #print(coin,formatted_time)
 
 # Print the JSON object
@@ -52,6 +59,8 @@ for n in range(0, 20):
 #Save the JSON object file
 #with open('data.json', 'w') as json_file:
  #json.dump(json_data, json_file)
+ 
+print(symbol)
 
 end1 = time.time()
 total_time = end1 - start1
